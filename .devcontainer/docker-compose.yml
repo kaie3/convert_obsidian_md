@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  deno:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    user: deno:deno
+    init: true
+    # ipc: host
+    stdin_open: true
+    tty: true
+    working_dir: "/home/deno/app"
+    volumes:
+      - ../:/home/deno/app
+    security_opt:
+      - seccomp:seccomp_profile.json
+    command: [sleep infinity"]

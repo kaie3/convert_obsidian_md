@@ -1,0 +1,27 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/ubuntu
+// Note: Ensure network access to 'raw.githubusercontent.com' for schema validation.
+{
+	"name": "deno",
+	"service": "deno",
+	"dockerComposeFile":["docker-compose.yml"],
+	"workspaceFolder": "/home/deno/app",
+	"containerUser": "deno",
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "uname -a",
+	// Configure tool-specific properties.
+	// "customizations": {},
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	"remoteUser": "deno",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"justjavac.vscode-deno-extensionpack"
+			]
+		}
+	}
+}
