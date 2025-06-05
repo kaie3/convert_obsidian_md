@@ -1,4 +1,3 @@
-/// <reference lib="dom" />
 import { Property, SaveToDownloadsOptions } from "../types/types.ts";
 import { generateFrontmatter } from "../utils/obsidian-note-creator.ts";
 import { saveFile } from "../utils/file-utils.ts";
