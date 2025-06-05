@@ -1,3 +1,3 @@
 export const trim = (str: string): string => {
-	return str.trim();
+  return str.trim();
 };

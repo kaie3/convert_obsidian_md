@@ -14,4 +14,4 @@ services:
       - ../:/home/deno/app
     security_opt:
       - seccomp:seccomp_profile.json
-    command: [sleep infinity"]
+    command: ["sleep", "infinity"]

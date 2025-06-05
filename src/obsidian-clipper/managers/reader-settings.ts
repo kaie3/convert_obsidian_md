@@ -1,7 +1,6 @@
-import { saveSettings, generalSettings } from '../utils/storage-utils';
+import { generalSettings, saveSettings } from "../utils/storage-utils";
 
 export function initializeReaderSettings() {
-	const form = document.getElementById('reader-settings-form');
-	if (!form) return;
-
-} 
+  const form = document.getElementById("reader-settings-form");
+  if (!form) return;
+}
