@@ -1,5 +1,6 @@
 import type { ElementHandle, Frame, Page } from "playwright";
 import { setupTurndownService, TurndownService } from "turndown";
+import { MathMLToLaTeX } from "mathml-to-latex";
 
 interface TurndownServiceInstance {
   turndown(html: string): string;
@@ -322,13 +323,12 @@ function addCustomTurndownRules(turndownService: TurndownServiceInstance) {
             ) {
               id = (li as HTMLElement).id.replace("fn:", "");
             } else {
-              const match =
-                (li as HTMLElement).id &&
+              const match = (li as HTMLElement).id &&
                   typeof (li as HTMLElement).id === "string"
-                  ? (li as HTMLElement).id.split("/").pop()?.match(
-                    /cite_note-(.+)/,
-                  )
-                  : null;
+                ? (li as HTMLElement).id.split("/").pop()?.match(
+                  /cite_note-(.+)/,
+                )
+                : null;
               id = match ? match[1] : (li as HTMLElement).id;
             }
             const supElement = (li as HTMLElement).querySelector &&

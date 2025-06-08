@@ -1,7 +1,9 @@
-import { escapeDoubleQuotes } from "./string-utils.ts";
 import { Property } from "../types/types.ts";
 import { generalSettings } from "./storage-utils.ts";
 
+function escapeDoubleQuotes(str: string): string {
+  return str.replace(/"/g, '\\"');
+}
 /**
  * Obsidian用frontmatterを生成する
  * @param properties frontmatterに含めるプロパティ配列
@@ -78,5 +80,3 @@ export function generateFrontmatter(properties: Property[]): string {
 
   return frontmatter;
 }
-
-// --- 不要なObsidian連携関数(saveToObsidian)を削除し、責務をfrontmatter生成のみに集約 ---

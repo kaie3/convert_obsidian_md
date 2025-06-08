@@ -1,4 +1,3 @@
-import browser from "./browser-polyfill";
 import {
   HistoryEntry,
   ModelConfig,
@@ -8,7 +7,6 @@ import {
   Settings,
 } from "../types/types";
 import { debugLog } from "./debug";
-import { copyToClipboard } from "core/popup";
 
 export type {
   HistoryEntry,

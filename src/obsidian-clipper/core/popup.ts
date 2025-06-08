@@ -1,8 +1,8 @@
 import { Property, SaveToDownloadsOptions } from "../types/types.ts";
-import { generateFrontmatter } from "../utils/frontmatter.ts";
-import { saveFile } from "../utils/download.ts";
+import { generateFrontmatter } from "../utils/obsidian-note-creator.ts";
+import { saveFile } from "../utils/file-utils.ts";
 import { incrementStat } from "../utils/storage-utils.ts";
-import { createMarkdownContent } from "../utils/markdown.ts";
+import { createMarkdownContent } from "../utils/markdown-converter.ts";
 
 /**
  * UIエラー表示（popup-ui.tsでのみ利用）
