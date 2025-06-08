@@ -1,87 +1,31 @@
 import { Property, SaveToDownloadsOptions } from "../types/types.ts";
-import { generateFrontmatter } from "../utils/obsidian-note-creator.ts";
-import { saveFile } from "../utils/file-utils.ts";
+import { generateFrontmatter } from "../utils/frontmatter.ts";
+import { saveFile } from "../utils/download.ts";
 import { incrementStat } from "../utils/storage-utils.ts";
-import { createMarkdownContent } from "../utils/markdown-converter.ts";
+import { createMarkdownContent } from "../utils/markdown.ts";
 
+/**
+ * UIエラー表示（popup-ui.tsでのみ利用）
+ */
 function showError(message: string): void {
   alert(message);
 }
 
 /**
- * HTML文字列をObsidian用Markdownに変換し、frontmatter付きでダウンロード保存する
- *
+ * Obsidian用Markdownファイルを保存する純粋関数（UI依存なし）
  * @example
- * // Playwright等で取得したHTMLを保存
- * await handleSaveToDownloads(html, { fileName: "sample", properties: [{name: "url", value: "https://example.com"}] });
- *
- * // 既存UIから呼び出し（引数なし）
- * await handleSaveToDownloads();
+ * await saveMarkdownToDownloads({
+ *   content: '<h1>Hello</h1>',
+ *   options: { fileName: 'sample', properties: [{ name: 'url', value: 'https://example.com' }] }
+ * });
  */
-export async function handleSaveToDownloads(
-  contentOrOptions: string | SaveToDownloadsOptions,
-  maybeOptions?: SaveToDownloadsOptions,
-) {
-  // UIからの呼び出し（引数なし）
-  if (typeof contentOrOptions === "undefined") {
-    try {
-      const noteNameField = document.getElementById(
-        "note-name-field",
-      ) as HTMLInputElement;
-      const pathField = document.getElementById(
-        "path-name-field",
-      ) as HTMLInputElement;
-      const vaultDropdown = document.getElementById(
-        "vault-select",
-      ) as HTMLSelectElement;
-      const fileName = noteNameField?.value || "untitled";
-      const path = pathField?.value || "";
-      const vault = vaultDropdown?.value || "";
-      const properties = Array.from(
-        document.querySelectorAll(".metadata-property input"),
-      ).map((input) => {
-        const inputElement = input as HTMLInputElement;
-        return {
-          id: inputElement.dataset.id ||
-            Date.now().toString() + Math.random().toString(36).slice(2, 11),
-          name: inputElement.id,
-          value: inputElement.type === "checkbox"
-            ? inputElement.checked
-            : inputElement.value,
-        };
-      }) as Property[];
-      const noteContentField = document.getElementById(
-        "note-content-field",
-      ) as HTMLTextAreaElement;
-      const frontmatter = await generateFrontmatter(properties);
-      const fileContent = frontmatter + noteContentField.value;
-      await saveFile({
-        content: fileContent,
-        fileName,
-        mimeType: "text/markdown",
-        tabId: undefined,
-        onError: (error) => showError("failedToSaveFile"),
-      });
-      await incrementStat("saveFile", vault, path);
-      const moreDropdown = document.getElementById("more-dropdown");
-      if (moreDropdown) {
-        moreDropdown.classList.remove("show");
-      }
-    } catch (error) {
-      showError("failedToSaveFile");
-    }
-    return;
-  }
-
-  // CLI/自動化用途: HTML文字列を受けて保存
-  const content = typeof contentOrOptions === "string"
-    ? contentOrOptions
-    : undefined;
-  const options: SaveToDownloadsOptions =
-    (typeof contentOrOptions === "object" ? contentOrOptions : maybeOptions) ||
-    {};
+export async function saveMarkdownToDownloads(params: {
+  content: string;
+  options?: SaveToDownloadsOptions;
+  onError?: (error: Error) => void;
+}): Promise<void> {
+  const { content, options = {}, onError } = params;
   if (!content) throw new Error("content(HTML)が必要です");
-
   // Markdown変換
   const markdown = createMarkdownContent(
     content,
@@ -95,6 +39,61 @@ export async function handleSaveToDownloads(
     fileName,
     mimeType: "text/markdown",
     tabId: undefined,
-    onError: (error) => showError("failedToSaveFile"),
+    onError,
   });
+}
+
+/**
+ * Chrome拡張popup UIから呼び出す保存処理
+ * @example
+ * await handleSaveToDownloadsFromUI();
+ */
+export async function handleSaveToDownloadsFromUI(): Promise<void> {
+  try {
+    // UIから値を取得
+    const noteNameField = document.getElementById(
+      "note-name-field",
+    ) as HTMLInputElement;
+    const pathField = document.getElementById(
+      "path-name-field",
+    ) as HTMLInputElement;
+    const vaultDropdown = document.getElementById(
+      "vault-select",
+    ) as HTMLSelectElement;
+    const fileName = noteNameField?.value || "untitled";
+    const path = pathField?.value || "";
+    const vault = vaultDropdown?.value || "";
+    const properties = Array.from(
+      document.querySelectorAll(".metadata-property input"),
+    ).map((input) => {
+      const inputElement = input as HTMLInputElement;
+      return {
+        id: inputElement.dataset.id ||
+          Date.now().toString() + Math.random().toString(36).slice(2, 11),
+        name: inputElement.id,
+        value: inputElement.type === "checkbox"
+          ? inputElement.checked
+          : inputElement.value,
+      };
+    }) as Property[];
+    const noteContentField = document.getElementById(
+      "note-content-field",
+    ) as HTMLTextAreaElement;
+    const frontmatter = await generateFrontmatter(properties);
+    const fileContent = frontmatter + noteContentField.value;
+    await saveFile({
+      content: fileContent,
+      fileName,
+      mimeType: "text/markdown",
+      tabId: undefined,
+      onError: (error) => showError("failedToSaveFile"),
+    });
+    await incrementStat("saveFile", vault, path);
+    const moreDropdown = document.getElementById("more-dropdown");
+    if (moreDropdown) {
+      moreDropdown.classList.remove("show");
+    }
+  } catch (error) {
+    showError("failedToSaveFile");
+  }
 }

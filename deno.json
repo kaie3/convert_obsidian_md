@@ -7,6 +7,7 @@
     "@std/fs": "jsr:@std/fs@^1.0.18",
     "@std/path": "jsr:@std/path@^1.1.0",
     "@zip-js/zip-js": "jsr:@zip-js/zip-js@^2.7.62",
-    "playwright": "npm:playwright@^1.52.0"
+    "playwright": "npm:playwright@^1.52.0",
+    "turndown": "npm:turndown@^7.2.0"
   }
 }

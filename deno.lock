@@ -7,7 +7,8 @@
     "jsr:@std/path@^1.1.0": "1.1.0",
     "jsr:@zip-js/zip-js@^2.7.62": "2.7.62",
     "npm:@types/node@*": "22.15.15",
-    "npm:playwright@^1.52.0": "1.52.0"
+    "npm:playwright@^1.52.0": "1.52.0",
+    "npm:turndown@^7.2.0": "7.2.0"
   },
   "jsr": {
     "@std/assert@1.0.13": {
@@ -33,6 +34,9 @@
     }
   },
   "npm": {
+    "@mixmark-io/domino@2.2.0": {
+      "integrity": "sha512-Y28PR25bHXUg88kCV7nivXrP2Nj2RueZ3/l/jdx6J9f8J4nsEGcgX0Qe6lt7Pa+J79+kPiJU3LguR6O/6zrLOw=="
+    },
     "@types/node@22.15.15": {
       "integrity": "sha512-R5muMcZob3/Jjchn5LcO8jdKwSCbzqmPB6ruBxMcf9kbxtniZHP327s6C37iOfuw8mbKK3cAQa7sEl7afLrQ8A==",
       "dependencies": [
@@ -57,6 +61,12 @@
         "fsevents"
       ],
       "bin": true
+    },
+    "turndown@7.2.0": {
+      "integrity": "sha512-eCZGBN4nNNqM9Owkv9HAtWRYfLA4h909E/WGAWWBpmB275ehNhZyk87/Tpvjbp0jjNl9XwCsbe6bm6CqFsgD+A==",
+      "dependencies": [
+        "@mixmark-io/domino"
+      ]
     },
     "undici-types@6.21.0": {
       "integrity": "sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ=="
@@ -178,7 +188,8 @@
       "jsr:@std/fs@^1.0.18",
       "jsr:@std/path@^1.1.0",
       "jsr:@zip-js/zip-js@^2.7.62",
-      "npm:playwright@^1.52.0"
+      "npm:playwright@^1.52.0",
+      "npm:turndown@^7.2.0"
     ]
   }
 }
